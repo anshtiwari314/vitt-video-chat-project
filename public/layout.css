@@ -1,0 +1,53 @@
+
+.layout{
+    background-color: gray;
+    height:90vh;
+    width:75vw;
+    
+    display: flex;
+    flex-wrap: wrap;
+}
+.layout .user-wrapper{
+    width:50%;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+.layout .user-wrapper .user{
+    width:fit-content;
+    height:fit-content;
+    /* background-color: aquamarine; */
+    
+}
+
+.layout .user-wrapper .user video{
+    height:200px;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+.layout .user-wrapper .user .name{
+    height:200px;
+    width:200px;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(96, 96, 96);
+    color:white
+}
+.layout .user-wrapper .user .name p{
+    font-size: 30px;
+    
+}
+.layout .user-wrapper:nth-child(2n){
+    background-color: rgb(67, 63, 63);
+}
+.layout .user-wrapper:nth-child(2n+1){
+    background-color: rgb(182, 182, 68);
+}
+.layout .user-wrapper:nth-child(2n+3){
+    background-color: rgb(79, 68, 182);
+}

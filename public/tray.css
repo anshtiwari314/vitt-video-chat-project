@@ -1,0 +1,69 @@
+body{
+    background-color: purple;
+}
+.tray{
+    height:50px;
+    margin:0 auto;
+    width:30%;
+    display: flex;
+    justify-content: space-around;
+    background-color: rgb(94, 94, 94);
+    position:absolute;
+    bottom:20px;
+    left:35%;
+    border:2px solid rgb(157, 157, 157);
+}
+.tray .time{
+    /* padding:10px 15px; */
+    
+    flex:2;
+    background-color: rgb(145, 145, 145);
+    height:100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.tray .time p{
+    font-weight: bold;
+    color:white;
+}
+.tray .stream{
+    flex:3;
+    height:100%;
+    /* padding:10px 15px; */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin:0 1px;
+    background-color: rgb(145, 145, 145);
+}
+.tray .icons{
+    color:white ;
+    font-size: 25px;
+    cursor: pointer;
+}
+.tray .icons:hover{
+    font-size: 28px;
+    color:rgb(79, 78, 78)
+}
+.tray .chats{
+    height:100%;
+    flex:3;
+    display: flex;
+    /* padding:10px 15px; */
+    justify-content: space-around;
+    align-items: center;
+    margin:0 1px 0 0;
+    background-color: rgb(147, 147, 147);
+}
+.tray .close{
+    
+    padding:20px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(232, 8, 8);
+}
+
+
+

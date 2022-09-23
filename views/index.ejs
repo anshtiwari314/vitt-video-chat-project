@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #video-grid{
+        display: grid;
+        grid-template-columns: repeat(auto-fill,300px);
+        grid-auto-rows:300px;
+
+    }
+    video{
+        width:100%;
+        height:100%;
+        object-fit: cover;
+    
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+    }
+</style>
+<script defer>
+    const ROOM_ID = "<%= roomId %>"
+    console.log(ROOM_ID)
+ </script>   
+ <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+ <script src="/socket.io/socket.io.js"></script>
+ <script defer src="script.js"></script>
+
+ <style>
+    *{
+        padding:0;
+        margin:0;
+        box-sizing: border-box;
+    }
+    .container{
+        display:flex;
+        position:relative;
+        height:100vh;
+    }
+    
+ </style>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+ <link rel="stylesheet" href="layout.css">
+ <link rel ="stylesheet" href="sidechat.css">
+ <link rel ="stylesheet" href="tray.css">
+<body>
+    <div class="container"  >
+<!-- style={{width:toggleSideChat? "75vw":"100vw"}} -->
+        <div class="layout" id="layout">
+      
+            <div class="user-wrapper">
+              <div class="user">
+                <video ref={vidRef} />
+              </div>
+            </div>
+      
+            <div class="user-wrapper">
+              <div class="user">
+              <video type="video/mp4" id="vid" />
+                <div class="name">
+                  <p>At</p>
+                </div>
+              </div>
+            </div> 
+      
+             <div class="user-wrapper">
+              <div class="user">
+              <!-- <video src={vid} type="video/mp4" id="vid" /> -->
+                <div class="name">
+                  <p>At</p>
+                </div>
+              </div>
+            </div> 
+         </div>
+
+         <!-- side chat     style={{display:toggleSideChat?'block': 'none',}}-->
+         <div class="chat" >
+            <div class="closeicon">
+                <i class="fa-solid fa-xmark" id="closeSideChatIcon"></i>
+            </div>
+            <div class="header">
+                <p>Group chat</p>
+                <button>Messages</button>
+                <button>Participants</button>
+            </div>
+            <div class="scrollable">
+            <div class="incoming">
+                <div>
+                <img src="https://images.hindustantimes.com/rf/image_size_630x354/HT/p2/2020/10/05/Pictures/_04663caa-0710-11eb-adc0-f7cc04e39ce3.jpg"/>
+                </div>
+                
+                <div class="client">
+                <p class="user">Alexandra opoloan</p>
+                <div class="msg"> 
+                    <p>Hey! i am waiting </p>
+                </div>
+                </div>
+            
+            </div>
+            <div class="incoming">
+                <div>
+                <img src="https://images.hindustantimes.com/rf/image_size_630x354/HT/p2/2020/10/05/Pictures/_04663caa-0710-11eb-adc0-f7cc04e39ce3.jpg"/>
+                </div>
+                
+                <div class="client">
+                <p class="user">Alexandra opoloan</p>
+                <div class="msg"> 
+                    <p>Hey! i am waiting </p>
+                </div>
+                </div>
+            
+            </div>
+            <div class="incoming">
+                <div>
+                <img src="https://images.hindustantimes.com/rf/image_size_630x354/HT/p2/2020/10/05/Pictures/_04663caa-0710-11eb-adc0-f7cc04e39ce3.jpg"/>
+                </div>
+                
+                <div class="client">
+                <p class="user">Alexandra opoloan</p>
+                <div class="msg"> 
+                    <p>Hey! i am waiting </p>
+                </div>
+                </div>
+            
+            </div>
+    
+            <div class="outgoing">
+                <div class="sender"> 
+                <p class="user">You</p>
+                <div class="msg">
+                    <p>i suggest to start this call a little bit later </p>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div class="footer">
+            <input type="text" placeholder="write your message..."/>
+            <button><i class="fa-solid fa-share" id="sendMsgIcon"></i></button>
+            </div>
+        </div>
+
+        <!-- tray -->
+        <div class="tray" >
+            <div class="time">
+            <p id="timeElement">0:0</p>
+            </div>
+            <div class="stream parent">
+                
+                <i class="fa-solid fa-video icons" id="vidIcon"></i>
+                <i class="fa-solid fa-video-slash icons" id="crossVidIcon" style="display:none"></i>
+                
+                <i class="fa-solid fa-microphone icons" id="micIcon" ></i>
+                <i class="fa-solid fa-microphone-slash icons" id="crossMicIcon" style="display:none"></i>
+            </div>
+            <div class="chats parent">
+                <i class="fa-solid fa-message icons" id="msgIcon"></i>
+                <i class="fa-solid fa-users icons" id="usersIcon"></i>
+            </div>
+            <div class="close">
+                <i class="fa-solid fa-xmark icons" id="crossIcon"></i>
+            </div>
+         </div>
+        
+    </div>
+</body>
+</html>

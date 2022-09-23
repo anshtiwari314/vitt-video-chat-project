@@ -1,0 +1,142 @@
+
+.chat{
+    height:98vh;
+    width:25vw;
+    position:relative;
+    /* background-color: #e0e5e4; */
+    padding-top:20px;
+    margin:5px 5px;
+    background-color: #e0e5e4;
+}
+.chat .closeicon{
+    position:absolute;
+    right:10px;
+    top:0;
+    padding:5px;
+    cursor:pointer
+}
+.chat .header{
+    display:flex;
+    align-items: center;
+    padding:15px 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: 1px solid #f3f5f5;
+    background-color: #e0e5e4;
+
+}
+.chat .header p{
+    font-size: 18px;
+    flex:2;
+    padding-left: 10px;
+}
+.chat .header button{
+    flex:1;
+    padding:7px 20px;
+    margin:0 3px;
+    border-radius:10px ;
+    background-color: #b2e4e0;
+    color:#05b59a;
+    font-weight: bold;
+    border-color:#b2e4e0;
+    cursor: pointer;
+}
+
+.chat .scrollable{
+    height:500px;
+   
+}
+.chat .scrollable .incoming{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    /* background-color: red; */
+    padding-left: 15px;
+    margin:5px 0;
+}
+.chat .scrollable img{
+    flex:1;
+    height:30px;
+    width:30px;
+    border-radius:15px;
+}
+.chat .scrollable .client{
+    flex:3;
+    padding-left: 20px;
+    padding-top:10px;
+}
+
+.chat .scrollable .incoming .user{
+    font-size: 12px;
+    
+}
+.chat .scrollable .incoming .msg{
+    border-radius: 10px;
+    background-color: white;
+    padding:10px 10px; 
+    width:fit-content;
+
+}
+.chat .scrollable .incoming .msg p{
+    font-size: 15px;
+}
+
+.chat .scrollable .outgoing{
+    /* background-color: aqua; */
+
+}
+.chat .scrollable .outgoing{
+    display:flex;
+    justify-content: end;
+}
+.chat .scrollable .outgoing .sender{
+    width:fit-content;
+    /* background-color: orange; */
+    padding-right: 10px;
+}
+.chat .scrollable .outgoing .sender .user{
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+.chat .scrollable .outgoing .sender .msg{
+    border-radius: 10px;
+    background-color: rgb(242, 242, 242);
+    padding:10px 10px; 
+    width:fit-content;
+}
+.chat .scrollable .outgoing .sender .msg p{
+    font-size: 15px;
+}
+
+/* chat footer*/
+
+.chat .footer{
+    background-color: white;
+    width:90%;
+    margin:auto auto;
+    padding:0 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+}
+.chat .footer input{
+    padding:18px 0;
+    outline:none;
+    width:85%;
+    border:none;
+}
+.chat .footer button{
+    width:15%;
+    height:fit-content;
+    padding:8px 0;
+    border-radius: 8px;
+    border:none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ade1d9;
+    cursor: pointer;
+}
+.chat .footer button .btn{
+   color:rgb(33, 221, 177)
+}
