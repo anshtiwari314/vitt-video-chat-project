@@ -44,7 +44,10 @@
 
 .chat .scrollable{
     height:500px;
-   
+    overflow-y: hidden;
+}
+.chat .scrollable:hover{
+    overflow-y:scroll
 }
 .chat .scrollable .incoming{
     display: flex;
@@ -59,6 +62,9 @@
     height:30px;
     width:30px;
     border-radius:15px;
+}
+.chat .scrollable .img{
+    margin-bottom: 10px;
 }
 .chat .scrollable .client{
     flex:3;
@@ -81,17 +87,16 @@
     font-size: 15px;
 }
 
-.chat .scrollable .outgoing{
-    /* background-color: aqua; */
 
-}
 .chat .scrollable .outgoing{
     display:flex;
     justify-content: end;
+    margin:5px 0;
 }
 .chat .scrollable .outgoing .sender{
     width:fit-content;
     /* background-color: orange; */
+    padding-top: 10px;
     padding-right: 10px;
 }
 .chat .scrollable .outgoing .sender .user{
@@ -113,7 +118,7 @@
 .chat .footer{
     background-color: white;
     width:90%;
-    margin:auto auto;
+    margin:10px auto;
     padding:0 10px;
     border-radius: 10px;
     display: flex;

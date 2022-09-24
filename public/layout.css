@@ -24,6 +24,7 @@
 
 .layout .user-wrapper .user video{
     height:200px;
+    border-radius: 10px;
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
 }

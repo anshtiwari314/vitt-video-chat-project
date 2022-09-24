@@ -20,7 +20,7 @@ let sendMsgIcon = document.getElementById('sendMsgIcon')
 let timeElement = document.getElementById('timeElement')
 let sideChat = document.getElementsByClassName('chat')
 let layout = document.getElementsByClassName('layout')
-
+let msgInput = document.getElementById('msgInput')
 
 let sideWindowStatus = true
 let myStream
@@ -69,6 +69,38 @@ usersIcon.addEventListener('click',()=>{
         openSideWindow()
     }
 })
+closeSideChatIcon.addEventListener('click',()=>{
+    sideWindowStatus = false 
+    closeSideWindow()
+})
+
+sendMsgIcon.addEventListener('click',()=>{
+    
+    if(msgInput.value != ''){
+    let msg = msgInput.value
+    msgInput.value = ''
+    
+    addNewMessage(msg,false,'')
+    
+    socket.emit('send-msg',msg,name)
+    }
+})
+msgInput.addEventListener('keyup',(e)=>{
+    if(e.key==='Enter' && msgInput.value != ''){
+
+    let msg = msgInput.value
+    msgInput.value = ''
+    addNewMessage(msg,false,'')
+    socket.emit('send-msg',msg,name)
+
+    }
+})
+crossIcon.addEventListener('click',()=>{
+    console.log('cross icon clicked')
+    window.open('', '_self', '');
+
+    window.close()
+})
 
 function openSideWindow(){
     sideChat[0].style.display = "block"
@@ -80,6 +112,9 @@ function closeSideWindow(){
     layout[0].style.width = "100vw"
 }
 
+socket.on('receive-msg',(msg,userName)=>{
+    addNewMessage(msg,true,userName)
+})
 
 socket.on('user-camera-toggle',(userId,state)=>{
     console.log('user-camera-toggle')
@@ -97,7 +132,36 @@ socket.on('user-camera-toggle',(userId,state)=>{
     
     
 })
+function addNewMessage(msg,isAnotherUser,userName){
+    let scrollable = document.getElementsByClassName('scrollable')[0]
 
+    if(isAnotherUser){
+        let incoming = document.createElement('div')
+        incoming.classList.add('incoming')
+        incoming.innerHTML = `<div class="img-wrapper">
+                                    <i class="fa-solid fa-user-large img"></i>
+                                    </div>
+                                    
+                                    <div class="client">
+                                    <p class="user">${userName}</p>
+                                    <div class="msg"> 
+                                        <p>${msg}</p>
+                                    </div>
+                            </div>`
+        scrollable.appendChild(incoming)
+    }else{
+    let outgoing = document.createElement('div')
+    outgoing.classList.add('outgoing')
+
+    outgoing.innerHTML =   `<div class="sender"> 
+                                <p class="user">You</p>
+                                <div class="msg">
+                                    <p>${msg} </p>
+                                </div>
+                            </div>`
+    scrollable.appendChild(outgoing) 
+    }
+}
 function toggleVideoOnOff(){
     
     let user = document.getElementById(myId)
@@ -200,6 +264,8 @@ function zoomOnClick(id){
 //video setup
 
 let peerArr = []
+let peersObj = {}
+
 console.log(navigator.mediaDevices)
 navigator.mediaDevices.getUserMedia({
     video:true,
@@ -213,7 +279,7 @@ navigator.mediaDevices.getUserMedia({
      peer.on('call',call=>{
         call.answer(stream)
         
-        
+        peersObj[call.peer] = call 
         
         call.on('stream',(oldUserVideoStream)=>{
             
@@ -222,12 +288,23 @@ navigator.mediaDevices.getUserMedia({
                 addVideoStream(call.peer,oldUserVideoStream)
             }
         })
+
+        call.on('close',()=>{
+            console.log('user leaved ')
+           removeVideo(call.peer)
+        })
      })
 
     socket.on('user-connected',newUserId=>{
-        
+        console.log('new user ',newUserId)
         connectToNewUser(newUserId,stream)
         
+    })
+    socket.on('user-disconnected',(userId)=>{
+        console.log('disconnect user id',userId)
+        if(peersObj[userId]){
+            peersObj[userId].close()
+        }
     })
 })
 
@@ -255,8 +332,10 @@ function connectToNewUser(newUserId,stream){
         }
     })
     call.on('close',()=>{
+        console.log('user leaved ')
        removeVideo(newUserId)
     })
+    peersObj[newUserId] =call
 }
 
 function removeVideo(id){
