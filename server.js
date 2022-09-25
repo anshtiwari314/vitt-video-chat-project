@@ -11,13 +11,20 @@ app.set("view engine","ejs")
 app.use(express.static('public'))
 
 app.get('/',(req,res)=>{
-    res.redirect(`/${uuid4()}`)
+   // res.redirect(`/${uuid4()}`)
+   res.render(`Home`)
+})
+
+app.get('/leave',(req,res)=>{
+    res.render('leave')
 })
 
 app.get('/:room',(req,res)=>{
    // console.log(req.params.room)
     res.render('index',{roomId:req.params.room})
 })
+
+
 
 io.on('connection',socket =>{
 

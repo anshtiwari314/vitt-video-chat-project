@@ -273,8 +273,9 @@ navigator.mediaDevices.getUserMedia({
 }).then(stream=>{
     myStream=stream
 
-    
-    addVideoStream(myId,stream)
+    let myVideo = document.createElement('video')
+    myVideo.muted = true 
+    addVideoStream(myVideo,myId,stream)
 
      peer.on('call',call=>{
         call.answer(stream)
@@ -285,7 +286,9 @@ navigator.mediaDevices.getUserMedia({
             
             if(!peerArr.includes(call.peer)){
                 peerArr.push(call.peer)
-                addVideoStream(call.peer,oldUserVideoStream)
+
+                let video = document.createElement('video')
+                addVideoStream(video,call.peer,oldUserVideoStream)
             }
         })
 
@@ -328,7 +331,8 @@ function connectToNewUser(newUserId,stream){
     call.on('stream',userVideoStream =>{
         if(!peerArr.includes(call.peer)){
             peerArr.push(call.peer)
-            addVideoStream(call.peer,userVideoStream)
+            let video = document.createElement('video')
+            addVideoStream(video,call.peer,userVideoStream)
         }
     })
     call.on('close',()=>{
@@ -342,12 +346,12 @@ function removeVideo(id){
    let usrWrapper = document.getElementById(id)
    usrWrapper.remove()
 }
-function addVideoStream(id,stream){
+function addVideoStream(video,id,stream){
     let layout = document.getElementById('layout')
 
     let usrWrapper = document.createElement('div')
     let usr = document.createElement('div')
-    let video = document.createElement('video')
+    
     let nameDiv = document.createElement('div')
     let p = document.createElement('p')
 
@@ -361,7 +365,6 @@ function addVideoStream(id,stream){
     usrWrapper.style.backgroundColor =colorArr[Math.floor(Math.random()*colorArr.length)]
     usrWrapper.setAttribute('zoom','false')
 
-    video.muted = true
     //video.style.height = "200px"
     video.srcObject = stream
     video.addEventListener('loadedmetadata',()=>{

@@ -52,29 +52,29 @@
 <!-- style={{width:toggleSideChat? "75vw":"100vw"}} -->
         <div class="layout" id="layout">
       
-            <div class="user-wrapper">
+            <!-- <div class="user-wrapper">
               <div class="user">
                 <video ref={vidRef} />
               </div>
-            </div>
+            </div> -->
       
-            <div class="user-wrapper">
+            <!-- <div class="user-wrapper">
               <div class="user">
               <video type="video/mp4" id="vid" />
                 <div class="name">
                   <p>At</p>
                 </div>
               </div>
-            </div> 
+            </div>  -->
       
-             <div class="user-wrapper">
+             <!-- <div class="user-wrapper">
               <div class="user">
-              <!-- <video src={vid} type="video/mp4" id="vid" /> -->
+              <video src={vid} type="video/mp4" id="vid" />
                 <div class="name">
                   <p>At</p>
                 </div>
               </div>
-            </div> 
+            </div>  -->
          </div>
 
          <!-- side chat     style={{display:toggleSideChat?'block': 'none',}}-->
@@ -140,7 +140,10 @@
                 <i class="fa-solid fa-users icons" id="usersIcon"></i>
             </div>
             <div class="close">
-                <i class="fa-solid fa-xmark icons" id="crossIcon"></i>
+                <a href="/leave">
+                    <i class="fa-solid fa-xmark icons" id="crossIcon"></i>
+                </a>    
+                
             </div>
          </div>
         
