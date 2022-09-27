@@ -25,6 +25,7 @@
 <script defer>
     const ROOM_ID = "<%= roomId %>"
     console.log(ROOM_ID)
+    sessionStorage.setItem('tempRoomId',ROOM_ID)
  </script>   
  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
  <script src="/socket.io/socket.io.js"></script>
@@ -35,6 +36,9 @@
         padding:0;
         margin:0;
         box-sizing: border-box;
+    }
+    body{
+        background-color: #636363;
     }
     .container{
         display:flex;
@@ -143,7 +147,6 @@
                 <a href="/leave">
                     <i class="fa-solid fa-xmark icons" id="crossIcon"></i>
                 </a>    
-                
             </div>
          </div>
         

@@ -3,10 +3,11 @@
     height:98vh;
     width:25vw;
     position:relative;
-    /* background-color: #e0e5e4; */
+   
     padding-top:20px;
     margin:5px 5px;
     background-color: #e0e5e4;
+    
 }
 .chat .closeicon{
     position:absolute;

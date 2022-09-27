@@ -6,14 +6,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap');
+
+    body{
+        background-color: #727272;
+    }
+    *{
+        font-family: 'Libre Baskerville', serif;
+        -webkit-user-drag:none;
+        -moz-user-drag:none;
+        -khtml-user-drag:none;
+        -ms-user-drag:none;
+
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -khtml-user-select: none;
+    }
+    .flex-container{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height:90vh;
+    }
+    h1{
+        font-size: 40px;
+        color:#141414;
+    }
+    img{
+        border-radius: 50px;
+        width:500px;
+        height:350px
+    }
+    p{
+        text-align: center;
+        width:200px;
+        color:white;
+        font-weight:bold;
+    }
+    #newMeeting,#join{
+        padding:10px 15px;
+        background-color: #355dd5;
+        border-radius: 15px;
+        color: white;
+        font-size: 15px;
+        outline:none;
+        border:none;
+        cursor: pointer;
+        text-transform: capitalize;
+    }
+    #newMeeting:hover,#join:hover{
+        background-color: #3f69e6;
+    }
+    #join{
+        margin-left: 10px;
+    }
+    #meetingInput{
+        width:200px;
+        padding:12px 15px;
+        border-radius:10px ;
+        border:none;
+        outline-color: white;
+    }
+</style>
 <body>
-    <div>
-        <h1>welcome to video chat project</h1>
-        <button id="newMeeting">new meeting</button>
-        <br/>
-        <div>
-            <input type="text" id="meetingInput"/> 
-            <button id="join">join</button>
+    <header></header>
+    <div class="flex-container">
+        <div >
+            <h1>Vitt Video Chat App</h1>
+            <div class="options">
+                <button id="newMeeting">new meeting</button>
+                <br/>
+                <p>Or</p>
+                <div >
+                    <input type="text" id="meetingInput"/> 
+                    <button id="join">join</button>
+                </div>
+            </div>
+        </div>
+        <div class="images">
+            <img style="display:none" src="https://media.istockphoto.com/photos/african-american-customer-woman-talking-to-support-service-employee-picture-id1355302972?b=1&k=20&m=1355302972&s=170667a&w=0&h=Hqyu97HPCdr7P3qu1TfCCVuzWZb5vLtUV7By-bwWzA8="/>
+            <img style="display:none" src="https://media.istockphoto.com/photos/business-team-in-video-conference-picture-id1410142294?b=1&k=20&m=1410142294&s=170667a&w=0&h=l3pHf2oCpdhVWUkSCD8QJMMiO167augTs7T41TY8ZaU="/>
+            <img style="display: none;" src="https://images.unsplash.com/photo-1616587894289-86480e533129?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"/>
+            <img src="https://cdn.pixabay.com/photo/2020/09/25/10/10/education-5600987_960_720.png"/>
         </div>
     </div>
 </body>
@@ -30,10 +106,50 @@
 
     meeting.addEventListener('click',()=>{
         // localStorage.setItem()
-        window.location.pathname = uuidv4();
+        let ROOM_ID = uuidv4()
+        
+
+        fetch('/createRoom',{
+        method:'POST',
+        headers:{
+            'Accept':'application.json',
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({roomId:ROOM_ID}),
+        cache:'default'
+        }).then(()=>{
+            window.location.pathname = ROOM_ID;
+        }).catch(e=>{
+            console.log(e)
+        })
+
+       
     })
     join.addEventListener('click',()=>{
         window.location.href = meetingInput.value
     })
+
+    let imageCount=0;
+    function changeImage(){
+        let images = document.getElementsByClassName('images')
+        let imgArr = images[0].children
+        
+        imageCount = imageCount%imgArr.length
+        
+        for(let i=0;i<imgArr.length;i++){
+            if(i==imageCount){
+                imgArr[i].style.display='block'
+            }else {
+            imgArr[i].style.display='none'
+            }
+        }
+
+        imageCount++;
+    }
+    setInterval(()=>{
+            changeImage()
+    },5000)
+    
+    
 </script>
 </html>

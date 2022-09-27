@@ -1,8 +1,35 @@
 const socket = io('/')
 
-
-
 let colorArr = ['rgb(146, 146, 145)' ,'rgb(111, 111, 111)', 'rgb(69, 69, 69)' ,'rgb(104, 104, 104)' ,'rgb(103, 97, 97)' ,'rgb(67, 63, 63)']
+
+
+fetch('/checkRoomId',{
+        method:'POST',
+        headers:{
+           'Accept':'application.json',
+           'Content-Type':'application/json'
+        },
+        body:JSON.stringify({roomId:ROOM_ID}),
+        cache:'default',
+       
+}).then(res=>{
+    // console.log(res.data)
+    // if(res.result ==='not-ok' )
+    //     window.location.pathname = '/'
+    return res.json()
+}).then(result=>{
+    if(JSON.parse(result).authorized ==='no' )
+        window.location.pathname = '/'
+    else{
+//code is inside 
+
+
+
+
+
+
+
+
 
 
 // basic page working setup 
@@ -412,3 +439,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     
 })
 
+
+
+
+// remaining code of fetch request
+}
+}).catch(e=>console.log(e))
