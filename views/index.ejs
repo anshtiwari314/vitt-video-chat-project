@@ -24,8 +24,64 @@
 </style>
 <script defer>
     const ROOM_ID = "<%= roomId %>"
+    let IS_HOST = false
+
     console.log(ROOM_ID)
     sessionStorage.setItem('tempRoomId',ROOM_ID)
+
+    function diff_minutes(time2, time1) {
+
+        var diff =(time2-time1) / 1000;
+        let diff_in_min = diff/ 60;
+        //let diff_in_hours = diff_in_min / 60;
+        return Math.abs(Math.round(diff_in_min));
+    }
+
+    if(!localStorage.getItem('created_by_admin')){
+    //local storage does not exist 
+        console.log('u r general user')
+    }else{
+    //local storage exist
+    
+    try{
+    //delete expired url
+    let tempLinks = localStorage.getItem('created_by_admin')
+    let arr = tempLinks.split(' ')
+   
+    let d = new Date()
+
+    //console.log('arr length end',arr.length)
+    arr=arr.filter((e,index)=>{
+                    //console.log('element is:',e)
+                    //console.log('time is : ',diff_minutes(d.getTime() ,JSON.parse(e).time) )
+                    if(JSON.parse(e).id === ROOM_ID)
+                            IS_HOST = true 
+                    if(diff_minutes(d.getTime() ,JSON.parse(e).time)<3)
+                        return true ;
+                    return false;
+                })
+    
+    tempLinks = ''
+
+    //convert back to string
+    arr.forEach((e)=>{
+            tempLinks = `${tempLinks} ${e}`
+    })
+    tempLinks=tempLinks.trim()
+    //console.log('arr length end',arr.length)
+    
+    localStorage.setItem('created_by_admin',`${tempLinks}`)
+    
+    console.log(IS_HOST===true ? 'u r admin':"general user")
+    //end of try block    
+    }catch(e){
+        console.log('error in try block',e)
+        localStorage.removeItem('created_by_admin')
+        setTimeout(()=>window.location.href='/',3000)
+    }
+
+    }
+
  </script>   
  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
  <script src="/socket.io/socket.io.js"></script>
@@ -87,11 +143,11 @@
                 <i class="fa-solid fa-xmark" id="closeSideChatIcon"></i>
             </div>
             <div class="header">
-                <p>Group chat</p>
-                <button>Messages</button>
-                <button>Participants</button>
+                <p id="header-status">Group chat</p>
+                <button id="chatBtn" >Messages</button>
+                <button id="usrBtn" class="button-active">Participants</button>
             </div>
-            <div class="scrollable" style="display:block">
+            <div class="scrollable messages" id="messages" style="display:none">
                 <!-- <div class="incoming">
                     <div class="img-wrapper">
                     <img src="https://images.hindustantimes.com/rf/image_size_630x354/HT/p2/2020/10/05/Pictures/_04663caa-0710-11eb-adc0-f7cc04e39ce3.jpg"/>
@@ -117,12 +173,41 @@
                     </div>
                 </div> -->
             </div>
-            <div class="participants" style="display:none">
-            
+            <div class="scrollable participants" id="participants">
+                <div class="user">
+                    <div class="icon">
+                        <div>
+                            <p>AT</p>
+                        </div>
+                    </div>
+                    <div class="name">
+                        <p >Anuj tiwari</p>
+                        <p class="host">Meeting host</p>
+                    </div>
+                    <div class="pins">
+                        <i class="fa-solid fa-thumbtack pin"></i>
+                    </div>
+                </div>
+
+                <div class="user">
+                    <div class="icon">
+                        <div>
+                            <p>AT</p>
+                        </div>
+                        
+                    </div>
+                    <div class="name">
+                        <p>Anuj tiwari</p>
+                        <p class="host" style="display:none;">Meeting host</p>
+                    </div>
+                    <div class="pins">
+                        <i class="fa-solid fa-thumbtack pin"></i>
+                    </div>
+                </div>
             </div>
-            <div class="footer">
+            <div class="footer" id="messages-footer" style="display:none">
             <input type="text" placeholder="write your message..." id="msgInput"/>
-            <button id="sendMsgIcon"><i class="fa-solid fa-share" ></i></button>
+            <button id="sendMsgIcon"><i class="fa-solid fa-share btn" ></i></button>
             </div>
         </div>
 

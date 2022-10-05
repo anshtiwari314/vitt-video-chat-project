@@ -103,6 +103,9 @@
       (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
     );
   }
+  
+
+
 
     meeting.addEventListener('click',()=>{
         // localStorage.setItem()
@@ -118,7 +121,23 @@
         body:JSON.stringify({roomId:ROOM_ID}),
         cache:'default'
         }).then(()=>{
+           
+            //if multiple links exist
+            if(localStorage.getItem('created_by_admin') !=null){
+                let d = new Date()
+                let tempLinks = localStorage.getItem('created_by_admin')
+
+                //add links to browser
+                localStorage.setItem('created_by_admin',`${tempLinks} ${JSON.stringify({id:ROOM_ID,time:d.getTime()}) }`)
+                
+            }
+            else{
+                //if creating link first time
+                let d = new Date()
+                localStorage.setItem('created_by_admin',JSON.stringify({id:ROOM_ID,time:d.getTime()}))
+            }
             window.location.pathname = ROOM_ID;
+
         }).catch(e=>{
             console.log(e)
         })

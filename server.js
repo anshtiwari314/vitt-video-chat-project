@@ -17,7 +17,38 @@ app.use(cors({
     origin:'*'
 }))
 
-let createdUrl = []
+let createdLinks = []
+
+function checkRoomStillExist(roomId){
+    for(let i=0; i<createdLinks.length ;i++){
+        if(roomId === createdLinks[i].roomId)
+            return true;
+    }
+    return false;
+}
+
+function diff_minutes(dt2, dt1) {
+
+  var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+  let diff_in_min = diff/ 60;
+  //let diff_in_hours = diff_in_min / 60;
+  return Math.abs(Math.round(diff_in_min));
+ }
+
+ function removeExpiredLinks(){
+    let d = new Date()
+    console.log('expired links triggered')
+    createdLinks.forEach((ele,index)=>{
+        
+        if(diff_minutes(d,ele.date) >60)
+            createdLinks.splice(index,1)
+        console.log(createdLinks[index],index)
+    })
+ }
+
+setInterval(()=>removeExpiredLinks(),1000*60)
+
+
 
 app.get('/',(req,res)=>{
    // res.redirect(`/${uuid4()}`)
@@ -30,20 +61,41 @@ app.get('/leave',(req,res)=>{
 app.post('/createRoom',(req,res)=>{
     //console.log(req.headers)
     console.log('the data must need to be here',req.body.roomId)
-    createdUrl.push(req.body.roomId)
+
+    let roomId = req.body.roomId
+    let d = new Date()
+    createdLinks.push({roomId:roomId,date:d})
     res.sendStatus(200)
 })
 app.post('/checkRoomId',(req,res)=>{
-    console.log(req.body.roomId)
+    //console.log(req.body.roomId)
    
   // res.append('access-control-allow-origin','*')
   //res.setHeader('Access-Control-Allow-Origin', '*');
-  res.append('Content-Type', 'application/json')
+    res.append('Content-Type', 'application/json')
 
-    if(createdUrl.includes(req.body.roomId))
+    if(checkRoomStillExist(req.body.roomId))
         res.json(JSON.stringify({authorized:'yes'}))
     else res.json(JSON.stringify({authorized:'no'}))
 })
+
+app.post('/checkMultipleRoomId',(req,res)=>{
+   let str = req.body.ids
+    let resultString =''
+   let arr = str.split(' ')
+   
+   arr.forEach((e,index)=>{
+    if(!checkRoomStillExist(req.body.roomId))
+        arr.splice(index,1)
+   })
+
+   arr.forEach((e,index)=>{
+    resultString = `${resultString} ${e}`
+   })
+   res.sendStatus(200).json({res:resultString})
+
+})
+
 app.get('/:room',(req,res)=>{
    // console.log(req.params.room)
     res.render('index',{roomId:req.params.room})

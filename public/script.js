@@ -1,7 +1,34 @@
 const socket = io('/')
 
-let colorArr = ['rgb(146, 146, 145)' ,'rgb(111, 111, 111)', 'rgb(69, 69, 69)' ,'rgb(104, 104, 104)' ,'rgb(103, 97, 97)' ,'rgb(67, 63, 63)']
 
+let colorArr = ['rgb(146, 146, 145)' ,'rgb(111, 111, 111)', 'rgb(69, 69, 69)' ,'rgb(104, 104, 104)' ,'rgb(103, 97, 97)' ,'rgb(67, 63, 63)']
+let userColorArr = [
+    {
+    background: 'rgb(164, 206, 234)',
+    color:'rgb(251, 74, 42)'
+    },
+    {
+    background: 'rgb(166, 164, 234)',
+    color:'rgb(4, 144, 214)'
+    },
+    {
+    background:'rgb(255, 223, 193)',
+    color:'rgb(83, 73, 151)'
+    },
+    {
+    background: 'rgb(227, 255, 210)',
+    color:'rgb(248, 140, 16)'
+    },
+    {
+        color:'rgb(176, 173, 4)',
+        background: 'rgb(251, 241, 171)'
+    },
+    {
+    background: 'rgb(252, 193, 193)',
+    color: 'rgb(238, 56, 56)'
+    }
+    
+]
 
 fetch('/checkRoomId',{
         method:'POST',
@@ -23,7 +50,16 @@ fetch('/checkRoomId',{
     else{
 //code is inside 
 
+let myName 
+if(sessionStorage.getItem('userName') != null){
+    myName = sessionStorage.getItem('userName')
+}else{
+   
+    while(!myName)
+    myName = prompt("Please Enter your name")
 
+    sessionStorage.setItem('userName',myName)
+}
 
 
 
@@ -49,11 +85,14 @@ let sideChat = document.getElementsByClassName('chat')
 let layout = document.getElementsByClassName('layout')
 let msgInput = document.getElementById('msgInput')
 
+let chatBtn = document.getElementById('chatBtn')
+let usrBtn = document.getElementById('usrBtn')
+
 let sideWindowStatus = true
 let myStream
 let myId =uuidv4()
 const peer = new Peer(myId)
-let name ="Ayush"
+
 
 vidIcon.addEventListener('click',()=>{
 
@@ -78,21 +117,34 @@ crossMicIcon.addEventListener('click',()=>{
     toggleMicOnOff()
 })
 msgIcon.addEventListener('click',()=>{
-      
-    if(sideWindowStatus == true){
-        sideWindowStatus =false 
-        closeSideWindow()
-    }else{
-        sideWindowStatus = true;
+    let msgWindow = document.getElementById('messages')
+    let participantsWindow = document.getElementById('participants')
+    let msgFooter = document.getElementById('messages-footer')
+    let headerStatus = document.getElementById('header-status')
+
+    msgWindow.style.display = 'block'
+    participantsWindow.style.display = 'none'
+    msgFooter.style.display = 'flex'
+    headerStatus.innerText = 'Group chat'
+
+    if(sideWindowStatus == false){
+        sideWindowStatus =true
         openSideWindow()
     }
 })
 usersIcon.addEventListener('click',()=>{
-    if(sideWindowStatus == true){
-        sideWindowStatus =false 
-        closeSideWindow()
-    }else{
-        sideWindowStatus = true;
+    let msgWindow = document.getElementById('messages')
+    let participantsWindow = document.getElementById('participants')
+    let msgFooter = document.getElementById('messages-footer')
+    let headerStatus = document.getElementById('header-status')
+
+    msgWindow.style.display = 'none'
+    participantsWindow.style.display = 'block'
+    msgFooter.style.display = 'none'
+    headerStatus.innerText = 'Guests'
+
+    if(sideWindowStatus == false){
+        sideWindowStatus =true
         openSideWindow()
     }
 })
@@ -127,6 +179,48 @@ crossIcon.addEventListener('click',()=>{
     window.open('', '_self', '');
 
     window.close()
+})
+
+chatBtn.addEventListener('click',()=>{
+    chatBtn.classList.add('button-active')
+    usrBtn.classList.remove('button-active')
+
+
+    let msgWindow = document.getElementById('messages')
+    let participantsWindow = document.getElementById('participants')
+    let msgFooter = document.getElementById('messages-footer')
+    let headerStatus = document.getElementById('header-status')
+
+    msgWindow.style.display = 'block'
+    participantsWindow.style.display = 'none'
+    msgFooter.style.display = 'flex'
+    headerStatus.innerText = 'Group chat'
+
+    if(sideWindowStatus == false){
+        sideWindowStatus =true
+        openSideWindow()
+    }
+
+})
+usrBtn.addEventListener('click',()=>{
+    chatBtn.classList.remove('button-active')
+    usrBtn.classList.add('button-active')
+
+    let msgWindow = document.getElementById('messages')
+    let participantsWindow = document.getElementById('participants')
+    let msgFooter = document.getElementById('messages-footer')
+    let headerStatus = document.getElementById('header-status')
+
+    msgWindow.style.display = 'none'
+    participantsWindow.style.display = 'block'
+    msgFooter.style.display = 'none'
+    headerStatus.innerText = 'Guests'
+
+    if(sideWindowStatus == false){
+        sideWindowStatus =true
+        openSideWindow()
+    }
+
 })
 
 function openSideWindow(){
@@ -192,15 +286,17 @@ function addNewMessage(msg,isAnotherUser,userName){
 function toggleVideoOnOff(){
     
     let user = document.getElementById(myId)
+    let videoChild = user.querySelector('video')
+    let nameChild = user.querySelector('.name')
 
-    if(user.children[0].children[0].style.display != 'none'){
-        user.children[0].children[0].style.display='none'
-        user.children[0].children[1].style.display='flex'
+    if(videoChild.style.display != 'none'){
+        videoChild.style.display='none' //video
+        nameChild.style.display='flex' //parent of p
         
     }else{
-        user.children[0].children[0].style.display='block'
-        user.children[0].children[1].style.display='none'
-       
+        videoChild.style.display='block'
+        nameChild.style.display='none'
+        
     }
 
 
@@ -293,7 +389,8 @@ function zoomOnClick(id){
 let peerArr = []
 let peersObj = {}
 
-console.log(navigator.mediaDevices)
+//console.log(navigator.mediaDevices)
+
 navigator.mediaDevices.getUserMedia({
     video:true,
     audio:true
@@ -302,11 +399,13 @@ navigator.mediaDevices.getUserMedia({
 
     let myVideo = document.createElement('video')
     myVideo.muted = true 
-    addVideoStream(myVideo,myId,stream)
+    addVideoStream(myVideo,myId,stream,myName,()=>{})
+    let tempObj
 
-     peer.on('call',call=>{
+
+    peer.on('call',call=>{
         call.answer(stream)
-        
+        console.log('call.peer',call.peer)
         peersObj[call.peer] = call 
         
         call.on('stream',(oldUserVideoStream)=>{
@@ -315,17 +414,51 @@ navigator.mediaDevices.getUserMedia({
                 peerArr.push(call.peer)
 
                 let video = document.createElement('video')
-                addVideoStream(video,call.peer,oldUserVideoStream)
+                addVideoStream(video,call.peer,oldUserVideoStream,undefined,()=>{ 
+                    changeLogoName(tempObj.name,tempObj.id)
+                })
             }
         })
-
+        
         call.on('close',()=>{
             console.log('user leaved ')
            removeVideo(call.peer)
+           removeParticipants(call.peer)
         })
+
+    })
+
+    peer.on('connection',(conn)=>{
+
+        conn.on('open', function() {
+            // Receive messages
+            conn.on('data', (obj)=> {
+                console.log('1st receiver',obj,conn.peer)
+                tempObj=obj
+              
+              addParticipants(obj.name,obj.host,conn.peer)
+              
+            });
+            // Send messages
+            conn.send({name:myName,host:IS_HOST,id:myId});
+          });
+
+        conn.on('close',()=>{
+           // console.log('1st remove conn.peer ',conn.peer)
+            
+        })
+
      })
 
-    socket.on('user-connected',newUserId=>{
+     
+
+        
+
+     
+
+     
+
+    socket.on('user-connected',(newUserId)=>{
         console.log('new user ',newUserId)
         connectToNewUser(newUserId,stream)
         
@@ -339,41 +472,94 @@ navigator.mediaDevices.getUserMedia({
 })
 
 peer.on('open',myId=>{
-    
-    
-    socket.emit('join-room',ROOM_ID,myId)
+    socket.emit('join-room',ROOM_ID,myId,myName)
 }) 
-
-function handleResponse(){
-
+function changeLogoName(name,id){
+    //console.log(document.getElementById(id).querySelector('p'))
+   document.getElementById(id).querySelector('p').innerText = name.toUpperCase().substring(0,2);
+    
+}
+function removeParticipants(id){
+    let element = document.getElementsByClassName(id)[0]
+    element.remove()
+}
+function addParticipants(name,host,id){
+    let participants  =  document.getElementById('participants')
+    let div = document.createElement('div')
+    div.classList.add('user')
+    div.classList.add(id)
+    
+    div.innerHTML = `<div class="icon">
+                        <div>
+                            <p>AT</p>
+                        </div>
+                    </div>
+                    <div class="name">
+                        <p >${name}</p>
+                        <p class="host style="display=${host?'':'none'}">Meeting host</p>
+                    </div>
+                    <div class="pins">
+                        <i class="fa-solid fa-thumbtack pin"></i>
+                    </div>`
+    
+    participants.appendChild(div)                 
+                    
 }
 
 function connectToNewUser(newUserId,stream){
     //i m calling
     const call = peer.call(newUserId,stream)
-    
-
+    let tempObj
     // i am receiving
-
     call.on('stream',userVideoStream =>{
         if(!peerArr.includes(call.peer)){
             peerArr.push(call.peer)
             let video = document.createElement('video')
-            addVideoStream(video,call.peer,userVideoStream)
+            addVideoStream(video,call.peer,userVideoStream,undefined,()=>{
+                changeLogoName(tempObj.name,tempObj.id)
+            })
         }
     })
+
     call.on('close',()=>{
         console.log('user leaved ')
        removeVideo(newUserId)
+       removeParticipants(newUserId)
     })
     peersObj[newUserId] =call
+
+
+
+        //for data connection 
+        const conn = peer.connect(newUserId)
+            
+        conn.on('open', function() {
+            // Receive messages
+            conn.on('data', (obj)=> {
+                //console.log('2nd receiver',obj)
+                tempObj=obj
+
+                addParticipants(obj.name,obj.host,newUserId)
+                
+            });
+
+            // Send messages
+            conn.send({name:myName,host:IS_HOST,id:myId});
+        });
+
+        conn.on('close',()=>{
+            console.log('2nd remove ',newUserId)
+            
+        })
+
+
 }
 
 function removeVideo(id){
    let usrWrapper = document.getElementById(id)
    usrWrapper.remove()
 }
-function addVideoStream(video,id,stream){
+function addVideoStream(video,id,stream,name='NA',cb){
     let layout = document.getElementById('layout')
 
     let usrWrapper = document.createElement('div')
@@ -381,12 +567,12 @@ function addVideoStream(video,id,stream){
     
     let nameDiv = document.createElement('div')
     let p = document.createElement('p')
-
+    
     usrWrapper.classList.add('user-wrapper')
     usrWrapper.id = id
     usr.classList.add('user')
     nameDiv.classList.add('name')
-    p.innerText = name.substring(0,2);
+    p.innerText = name.toUpperCase().substring(0,2);
 
     nameDiv.style.display = 'none'
     usrWrapper.style.backgroundColor =colorArr[Math.floor(Math.random()*colorArr.length)]
@@ -407,6 +593,8 @@ function addVideoStream(video,id,stream){
     layout.appendChild(usrWrapper)
    // console.log(VideoGrid) 
   // VideoGrid.append(video)
+
+  setTimeout(()=>cb(),1000)
 }
 
 
@@ -431,15 +619,59 @@ function timer(hour,min,sec,d){
 
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+    //code for timer
     let d = new Date()
     setInterval(()=>{
         timer(d.getHours(),d.getMinutes(),d.getSeconds(),d)
     },1000)
     
+
+
+//code to send record data
+
+navigator.mediaDevices.getUserMedia({
+    video:false,
+    audio:true
+}).then(audioStream=>{
+    
+    let audioChunks = []
+   
+    function sendToServer(blob){
+        let reader = new FileReader();
+        reader.onloadend = ()=>{
+            let base64data = reader.result;
+            //console.log(base64data.split(',')[1])
+            //https://f6p70odi12.execute-api.ap-south-1.amazonaws.com
+            //http://localhost:5000/checkRoomId
+            fetch('https://f6p70odi12.execute-api.ap-south-1.amazonaws.com',{
+                method:'POST',
+                headers:{
+                   'Accept':'application.json',
+                   'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    audiomessage:base64data.split(',')[1],
+                    uid:'random-just-for-test'
+                }),
+                cache:'default',}).then(res=>console.log(res))
+
+        }
+
+        reader.readAsDataURL(blob)
+    }
+
+    function recordAudio(stream){
+        console.log(`record audio triggerd`)
+        let mediaRecorder = new MediaRecorder(stream);
+        
+        mediaRecorder.ondataavailable = (e)=> audioChunks.push(e.data);
+        mediaRecorder.onstop = ()=>{sendToServer(new Blob(audioChunks,{'type':'audio/wav'}));chunks = [] };
+        setTimeout(()=>{ mediaRecorder.stop()},2000)
+        mediaRecorder.start()
+
+    }
+  //  setInterval(()=>recordAudio(audioStream),2000)
 })
-
-
 
 
 // remaining code of fetch request
