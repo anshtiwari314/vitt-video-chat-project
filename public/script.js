@@ -497,7 +497,7 @@ function addParticipants(name,host,id){
                     </div>
                     <div class="name">
                         <p >${name}</p>
-                        <p class="host style="display=${host?'block':'none'}">Meeting host</p>
+                        <p class="host style="display=${host=== true ?'block':'none'}">Meeting host</p>
                     </div>
                     <div class="pins">
                         <i class="fa-solid fa-thumbtack pin"></i>
