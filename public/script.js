@@ -484,7 +484,7 @@ function removeParticipants(id){
     element.remove()
 }
 function addParticipants(name,host,id){
-    console.log(host,id)
+    console.log(host,id,host=== true ?'block':'none')
     let participants  =  document.getElementById('participants')
     let div = document.createElement('div')
     div.classList.add('user')
@@ -497,7 +497,7 @@ function addParticipants(name,host,id){
                     </div>
                     <div class="name">
                         <p >${name}</p>
-                        <p class="host style="display=${host=== true ?'block':'none'}">Meeting host</p>
+                        <p class="host" style="display=${host=== true ?'block':'none'}">Meeting host</p>
                     </div>
                     <div class="pins">
                         <i class="fa-solid fa-thumbtack pin"></i>
